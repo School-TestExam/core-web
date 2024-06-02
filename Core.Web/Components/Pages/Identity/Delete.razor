@@ -1,1 +1,41 @@
 @page "/identity/delete"
+@using Core.Web.Client.Clients
+@rendermode InteractiveServer
+
+@inject IIdentityClient _client;
+
+<Div Position="Position.Relative">
+    <Div>
+        <Heading Size="HeadingSize.Is1" TextAlignment="TextAlignment.Center">Delete an Identity</Heading>
+    </Div>
+    <Row>
+        <Column ColumnSize="ColumnSize.Is12">
+            <Field>
+                <FieldLabel>ID</FieldLabel>
+                <FieldBody>
+                    <TextEdit Placeholder="ID" @bind-Text="@_id"></TextEdit>
+                </FieldBody>
+            </Field>
+        </Column>
+    </Row>
+
+    <Button Color="Color.Primary" Clicked="@OnDelete" Loading="_loading">Delete Identity</Button>
+</Div>
+
+
+@code
+{
+    bool _loading;
+    string _id;
+
+    private async Task OnDelete()
+    {
+        _loading = true;
+
+        var id = Guid.Parse(_id);
+        
+        await _client.Delete(id);
+        _loading = false;
+    }
+
+}

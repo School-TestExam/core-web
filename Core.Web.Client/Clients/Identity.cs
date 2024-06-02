@@ -7,7 +7,10 @@ namespace Core.Web.Client.Clients;
 
 public interface IIdentityClient
 {
-    public Task<DTO> CreateIdentity(Create request);
+    public Task<DTO?> Create(Create request);
+    public Task Delete(Guid id);
+    public Task<DTO?> Get(Guid id);
+    public Task<DTO?> Update(Guid id, Update request);
 }
 
 public class IdentityClient : IIdentityClient
@@ -19,7 +22,7 @@ public class IdentityClient : IIdentityClient
         _client = client;
     }
 
-    public async Task<DTO> CreateIdentity(Create request)
+    public async Task<DTO?> Create(Create request)
     {
         var content = JsonSerializer.Serialize(request);
         var payload = new StringContent(content, Encoding.UTF8, "application/json");
@@ -27,7 +30,46 @@ public class IdentityClient : IIdentityClient
         
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception("Failed to create identity");
+            throw new Exception($"{response.ReasonPhrase}");
+        }
+        
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var dto = JsonSerializer.Deserialize<DTO>(responseContent);
+        return dto!;
+    }
+    public async Task Delete(Guid id)
+    {
+        var response = await _client.DeleteAsync($"{_client.BaseAddress}/identity/{id}");
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception($"{response.ReasonPhrase}");
+        }
+    }
+    
+    public async Task<DTO?> Get(Guid id)
+    {
+        var response = await _client.GetAsync($"{_client.BaseAddress}/identity/{id}");
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception($"{response.ReasonPhrase}");
+        }
+        
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var dto = JsonSerializer.Deserialize<DTO>(responseContent);
+        return dto!;
+    }
+
+    public async Task<DTO?> Update(Guid id, Update request)
+    {
+        var content = JsonSerializer.Serialize(request);
+        var payload = new StringContent(content, Encoding.UTF8, "application/json");
+        var response = await _client.PutAsync($"{_client.BaseAddress}/identity/{id}", payload);
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception($"{response.ReasonPhrase}");
         }
         
         var responseContent = await response.Content.ReadAsStringAsync();

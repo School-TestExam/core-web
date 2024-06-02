@@ -1,6 +1,6 @@
-@page "/identity/create"
+@page "/identity/update"
 @rendermode InteractiveServer
-@using Request = Core.Web.Models.Identity.Requests.Create
+@using Request = Core.Web.Models.Identity.Requests.Update
 @using Core.Web.Models.Identity
 @using Core.Web.Client.Clients
 
@@ -10,6 +10,16 @@
     <Div>
         <Heading Size="HeadingSize.Is1" TextAlignment="TextAlignment.Center">Create an Identity</Heading>
     </Div>
+    <Row>
+        <Column ColumnSize="ColumnSize.Is12">
+            <Field>
+                <FieldLabel>ID</FieldLabel>
+                <FieldBody>
+                    <TextEdit Placeholder="ID" @bind-Text="@_id"></TextEdit>
+                </FieldBody>
+            </Field>
+        </Column>
+    </Row>
     <Row>
         <Column ColumnSize="ColumnSize.Is4">
             <Field>
@@ -47,14 +57,14 @@
         </Column>
     </Row>
 
-    <Button Color="Color.Primary" Clicked="@OnCreate" Loading="_loading">Create Identity</Button>
+    <Button Color="Color.Primary" Clicked="@OnUpdate" Loading="_loading">Update Identity</Button>
 </Div>
 
 @if (_dto is not null)
 {
     <Div Position="Position.Relative">
         <Div>
-            <Heading Size="HeadingSize.Is1" TextAlignment="TextAlignment.Center">Result: </Heading>
+            <Heading Size="HeadingSize.Is1" TextAlignment="TextAlignment.Center">Result </Heading>
         </Div>
         <Row>
             <Column ColumnSize="ColumnSize.Is8">
@@ -98,15 +108,17 @@
 @code
 {
     bool _loading;
-    Request _request = new();
+    string _id;
     DTO? _dto;
+    Request _request = new();
 
-    private async Task OnCreate()
+    private async Task OnUpdate()
     {
         _loading = true;
 
-        _dto = await _client.Create(_request);
+        var id = Guid.Parse(_id);
+
+        _dto = await _client.Update(id, _request);
         _loading = false;
     }
-
 }
