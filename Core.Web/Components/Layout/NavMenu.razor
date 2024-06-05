@@ -1,0 +1,47 @@
+﻿@rendermode InteractiveServer
+
+<Bar Mode="BarMode.VerticalInline"
+     CollapseMode="BarCollapseMode.Small"
+     Breakpoint="Breakpoint.Desktop"
+     NavigationBreakpoint="Breakpoint.Tablet"
+     ThemeContrast="ThemeContrast.Dark">
+    <BarBrand>
+        <BarItem>
+            <BarLink To="/home">
+                <BarIcon IconName="IconName.Dashboard"></BarIcon>
+                Exam.Test
+            </BarLink>
+        </BarItem>
+    </BarBrand>
+    <BarToggler/>
+    <BarMenu>
+        <BarStart>
+            <BarItem>
+                <BarLink To="/home">
+                    <BarIcon IconName="IconName.Home"></BarIcon>
+                    Home
+                </BarLink>
+            </BarItem>
+            <BarItem>
+                <BarDropdown>
+                    <BarDropdownToggle>
+                        <BarIcon IconName="IconName.Edit"></BarIcon>
+                        Identity
+                    </BarDropdownToggle>
+                    <BarDropdownMenu>
+                        <BarDropdownItem>
+                            <BarLink To="/identity/Create">Create</BarLink>
+                            <BarDropdownDivider/>
+                            <BarLink To="/identity/Delete">Delete</BarLink>             
+                            <BarDropdownDivider/>
+                            <BarLink To="/identity/Create">Get</BarLink>
+                            <BarDropdownDivider/>
+                            <BarLink To="/identity/Delete">Update</BarLink>
+                        </BarDropdownItem>
+                    </BarDropdownMenu>
+                </BarDropdown>
+            </BarItem>
+        </BarStart>
+        <BarEnd></BarEnd>
+    </BarMenu>
+</Bar>
