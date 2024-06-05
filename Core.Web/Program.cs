@@ -1,6 +1,7 @@
 using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using Core.Web.Client.Clients;
 using Core.Web.Client.Pages;
 using Core.Web.Components;
 
@@ -17,6 +18,11 @@ builder.Services.AddBlazorise(opt =>
     })
     .AddBootstrap5Providers()
     .AddFontAwesomeIcons();
+
+builder.Services.AddHttpClient<IIdentityClient, IdentityClient>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5092/api/v1");
+});
 
 var app = builder.Build();
 

@@ -1,0 +1,112 @@
+@page "/identity/create"
+@rendermode InteractiveServer
+@using Request = Core.Web.Models.Identity.Requests.Create
+@using Core.Web.Models.Identity
+@using Core.Web.Client.Clients
+
+@inject IIdentityClient _client;
+
+<Div Position="Position.Relative">
+    <Div>
+        <Heading Size="HeadingSize.Is1" TextAlignment="TextAlignment.Center">Create an Identity</Heading>
+    </Div>
+    <Row>
+        <Column ColumnSize="ColumnSize.Is4">
+            <Field>
+                <FieldLabel>Username</FieldLabel>
+                <FieldBody>
+                    <TextEdit Placeholder="Username" @bind-Text="@_request.Username"></TextEdit>
+                </FieldBody>
+            </Field>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is8">
+            <Field>
+                <FieldLabel>Password</FieldLabel>
+                <FieldBody>
+                    <TextEdit Role="TextRole.Password" Placeholder="Super Secret Password" @bind-Text="@_request.Password"></TextEdit>
+                </FieldBody>
+            </Field>
+        </Column>
+    </Row>
+    <Row>
+        <Column ColumnSize="ColumnSize.Is8">
+            <Field>
+                <FieldLabel>Email</FieldLabel>
+                <FieldBody>
+                    <TextEdit Role="TextRole.Email" Placeholder="Email" @bind-Text="@_request.Email"></TextEdit>
+                </FieldBody>
+            </Field>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is4">
+            <Field>
+                <FieldLabel>Full name</FieldLabel>
+                <FieldBody>
+                    <TextEdit Placeholder="Full name" @bind-Text="@_request.FullName"></TextEdit>
+                </FieldBody>
+            </Field>
+        </Column>
+    </Row>
+
+    <Button Color="Color.Primary" Clicked="@OnCreate" Loading="_loading">Create Identity</Button>
+</Div>
+
+@if (_dto is not null)
+{
+    <Div Position="Position.Relative">
+        <Div>
+            <Heading Size="HeadingSize.Is1" TextAlignment="TextAlignment.Center">Result: </Heading>
+        </Div>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is8">
+                <Text TextColor="TextColor.Primary">
+                    ID:
+                </Text>
+                <Text TextColor="TextColor.Secondary">
+                    @_dto.Id
+                </Text>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is4">
+                <Text TextColor="TextColor.Primary">
+                    Username:
+                </Text>
+                <Text TextColor="TextColor.Secondary">
+                    @_dto.Username
+                </Text>
+            </Column>
+        </Row>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is8">
+                <Text TextColor="TextColor.Primary">
+                    Email:
+                </Text>
+                <Text TextColor="TextColor.Secondary">
+                    @_dto.Email
+                </Text>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is4">
+                <Text TextColor="TextColor.Primary">
+                    Full Name:
+                </Text>
+                <Text TextColor="TextColor.Secondary">
+                    @_dto.FullName
+                </Text>
+            </Column>
+        </Row>
+    </Div>
+}
+
+@code
+{
+    bool _loading;
+    Request _request = new();
+    DTO? _dto;
+
+    private async Task OnCreate()
+    {
+        _loading = true;
+
+        _dto = await _client.Create(_request);
+        _loading = false;
+    }
+
+}
